@@ -1,29 +1,24 @@
 import commander from 'commander'
-import { admin } from './admin'
+import { list, setClaim, setClaimList } from './command'
 
 const start = async () => {
-  console.log('start')
-
   commander
+    .command('setClaim', { isDefault: true })
     .requiredOption('-e, --email <email>', 'Email to perform operations on')
     .requiredOption('-c, --claim-name <claimName>', 'Claim to add to user')
     .requiredOption('-v, --claim-value <claimValue>', 'Claim to add to user')
+    .action(setClaim)
 
-  commander.parse()
+  commander.command('list').action(list)
 
-  const options = commander.opts()
+  commander
+    .command('setClaimList', { isDefault: true })
+    .requiredOption('-e, --email <email>', 'Email regex to filter and apply ops')
+    .requiredOption('-c, --claim-name <claimName>', 'Claim to add to user')
+    .requiredOption('-v, --claim-value <claimValue>', 'Claim to add to user')
+    .action(setClaimList)
 
-  const user = await admin.auth().getUserByEmail(options.email)
-
-  console.log('options', options)
-  console.log('user', user)
-
-  await admin.auth().setCustomUserClaims(user.uid, { ...user.customClaims, [options.claimName]: options.claimValue })
-
-  const userAfterUpdate = await admin.auth().getUserByEmail(options.email)
-  console.log('after claims', userAfterUpdate.customClaims)
-
-  console.log('done!')
+  await commander.parseAsync()
 }
 
 start()
