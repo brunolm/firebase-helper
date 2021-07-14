@@ -3,5 +3,15 @@
 ## Usage
 
 ```
-yarn start -- -e email@localtest.me -c custom -v 123
+Usage: index [options] [command]
+
+Options:
+  -h, --help              display help for command
+
+Commands:
+  setClaim [options]
+  list
+  setClaimList [options]
+  create [options]
+  help [command]          display help for command
 ```
